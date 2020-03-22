@@ -22,9 +22,9 @@ void show_letter(char symbol)
 	{
 		DelayEnum current_signal_type = *(letterInfo.row + i);
 		
-		c14_on();		
+		a1_on();		
 		delay_for_signal(current_signal_type);		
-		c14_off();
+		a1_off();
 		delay(between_signal_delay);
 	}
 }

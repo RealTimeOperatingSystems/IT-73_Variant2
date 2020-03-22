@@ -1,15 +1,15 @@
 #include "microcontroller_setup.h"
 
-void enable_ports_b_c(void)
+void enable_ports_a_b(void)
 {
 	int *ptr_RCC_APB2ENR = (int*)0x40021018;	
-	*ptr_RCC_APB2ENR |= 0x0018;
+	*ptr_RCC_APB2ENR |= 0x000C;
 }
 
-void set_port_c14_as_output(void)
+void set_port_a1_as_output(void)
 {
-	int *GPIO_C_CRH = (int*)0x40011004;	
-	*GPIO_C_CRH = 0x03000000;
+	int *GPIO_A_CRL = (int*)0x40010800;	
+	*GPIO_A_CRL = 0x00000030;
 }
 
 void set_port_b9_as_input(void)
@@ -20,21 +20,21 @@ void set_port_b9_as_input(void)
 
 void configure_registers(void)
 {
-	enable_ports_b_c();
-	set_port_c14_as_output();
+	enable_ports_a_b();
+	set_port_a1_as_output();
 	set_port_b9_as_input();
 }
 
-void c14_on(void)
+void a1_on(void)
 {
-	int *GPIO_C_ODR = (int*)0x4001100C;	
-	*GPIO_C_ODR = 0x00004000;
+	int *GPIO_A_ODR = (int*)0x4001080C;	
+	*GPIO_A_ODR = 0x00000002;
 }
 
-void c14_off(void)
+void a1_off(void)
 {
-	int *GPIO_C_ODR = (int*)0x4001100C;	
-	*GPIO_C_ODR = 0x00000000;
+	int *GPIO_A_ODR = (int*)0x4001080C;	
+	*GPIO_A_ODR = 0x00000000;
 }
 
 int get_b9(void)

@@ -18,7 +18,7 @@ int main(void)
 		}
 		else
 		{
-			c14_off();
+			a1_off();
 		}
 	}
 }
