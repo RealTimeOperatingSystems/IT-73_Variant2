@@ -397,6 +397,26 @@
               <FileType>1</FileType>
               <FilePath>.\delay.c</FilePath>
             </File>
+            <File>
+              <FileName>initialization.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\initialization.c</FilePath>
+            </File>
+            <File>
+              <FileName>initialization.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\initialization.h</FilePath>
+            </File>
+            <File>
+              <FileName>blink.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\blink.c</FilePath>
+            </File>
+            <File>
+              <FileName>blink.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\blink.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
