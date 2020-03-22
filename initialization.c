@@ -1,26 +1,21 @@
 #include "initialization.h"
-
-void enable_ports_a_b(void)
-{
-	int *ptr_RCC_APB2ENR = (int*)0x40021018;	
-	*ptr_RCC_APB2ENR |= 0x000C;
-}
+#include "stm32f10x.h"
 
 void set_port_a1_as_output(void)
 {
-	int *GPIO_A_CRL = (int*)0x40010800;	
-	*GPIO_A_CRL = 0x00000030;
+	GPIOA->CRL |= GPIO_CRL_MODE1;
+	GPIOA->CRL &= ~GPIO_CRL_CNF1;
 }
 
 void set_port_b9_as_output(void)
 {
-	int *GPIO_B_CRH = (int*)0x40010C04;	
-	*GPIO_B_CRH = 0x00000030;
+	GPIOB->CRH |= GPIO_CRH_MODE9;
+	GPIOB->CRH &= ~GPIO_CRH_CNF9;
 }
 
 void initialize(void)
 {
-	enable_ports_a_b();
+	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_IOPBEN;
 	set_port_a1_as_output();
 	set_port_b9_as_output();
 }

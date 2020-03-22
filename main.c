@@ -1,5 +1,7 @@
+#include "stm32f10x.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_rcc.h"
 #include "initialization.h"
-#include "blink.h"
 #include "delay.h"
 
 const int T = 20;
@@ -12,24 +14,24 @@ int main(void)
 	
 	for(;;)
 	{
-		b9_on();
-		a1_on();
+		GPIOB->ODR |= GPIO_Pin_9;
+		GPIOA->ODR |= GPIO_Pin_1;
 		
 		if(a1_t < b9_t)
 		{
 			delay(a1_t);
-			a1_off();
+			GPIOA->ODR &= ~GPIO_Pin_1;
 			
 			delay(b9_t - a1_t);
-			b9_off();
+			GPIOB->ODR &= ~GPIO_Pin_9;
 		}
 		else
 		{
 			delay(b9_t);
-			b9_off();
+			GPIOB->ODR &= ~GPIO_Pin_9;
 			
 			delay(a1_t - b9_t);
-			a1_off();
+			GPIOA->ODR &= ~GPIO_Pin_1;
 		}
 		
 		delay(T - a1_t - b9_t);
