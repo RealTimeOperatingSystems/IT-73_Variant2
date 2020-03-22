@@ -14,24 +14,24 @@ int main(void)
 	
 	for(;;)
 	{
-		GPIOB->ODR |= GPIO_Pin_9;
-		GPIOA->ODR |= GPIO_Pin_1;
+		GPIO_SetBits(GPIOB, GPIO_Pin_9);
+		GPIO_SetBits(GPIOA, GPIO_Pin_1);
 		
 		if(a1_t < b9_t)
 		{
 			delay(a1_t);
-			GPIOA->ODR &= ~GPIO_Pin_1;
+			GPIO_ResetBits(GPIOA, GPIO_Pin_1);
 			
 			delay(b9_t - a1_t);
-			GPIOB->ODR &= ~GPIO_Pin_9;
+			GPIO_ResetBits(GPIOB, GPIO_Pin_9);
 		}
 		else
 		{
 			delay(b9_t);
-			GPIOB->ODR &= ~GPIO_Pin_9;
+			GPIO_ResetBits(GPIOB, GPIO_Pin_9);
 			
 			delay(a1_t - b9_t);
-			GPIOA->ODR &= ~GPIO_Pin_1;
+			GPIO_ResetBits(GPIOA, GPIO_Pin_1);
 		}
 		
 		delay(T - a1_t - b9_t);
