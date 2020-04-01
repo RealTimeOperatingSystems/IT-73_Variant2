@@ -22,6 +22,8 @@ int main(void)
 			
 			delay(b9_t - a1_t);
 			b9_off();
+		
+			delay(T - b9_t);
 		}
 		else
 		{
@@ -30,8 +32,8 @@ int main(void)
 			
 			delay(a1_t - b9_t);
 			a1_off();
-		}
 		
-		delay(T - a1_t - b9_t);
+			delay(T - a1_t);
+		}
 	}
 }
