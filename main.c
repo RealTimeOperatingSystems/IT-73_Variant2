@@ -24,6 +24,8 @@ int main(void)
 			
 			delay(b9_t - a1_t);
 			GPIOB->ODR &= ~GPIO_Pin_9;
+		
+			delay(T - b9_t);
 		}
 		else
 		{
@@ -32,8 +34,8 @@ int main(void)
 			
 			delay(a1_t - b9_t);
 			GPIOA->ODR &= ~GPIO_Pin_1;
-		}
 		
-		delay(T - a1_t - b9_t);
+			delay(T - a1_t);
+		}
 	}
 }
