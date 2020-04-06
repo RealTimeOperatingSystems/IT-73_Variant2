@@ -2,16 +2,23 @@
 #include <stm32f10x_rcc.h>
 #include <stm32f10x_gpio.h>
 #include "sysTickDelay.h"
+#include "stepperMotor.h"
+
+const uint32_t tau = 2;
+const uint32_t T = 10;
 
 int main(void)
-{	
-	//initialization
+{
+	InitializeStepperMotor();
+	
 	ConfigSysTickTimer();
+	
+	TurnOnStepperMotor();
 	
 	for(;;)
 	{
-		//loop work
-		Delay(1000);
+		StepperMotorMakeStep(tau);
+		Delay(T - tau);
 	}
 }
 
