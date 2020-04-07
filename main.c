@@ -9,23 +9,14 @@ const uint32_t tau = 2;
 const uint32_t T = 10;
 const uint32_t neededPressedIterations = 100;
 
-typedef enum
-{
-	TurningOff,
-	TurnedOff,
-	TurningOn,
-	RotatingClockwise,
-	RotatingCounterclockwise
-} State;
-
-State currentState = TurnedOff;
-State nextState = TurningOn;
-
 void turnOff(void);
 void wait(void);
 void turnOn(void);
 void rotateClockwise(void);
 void rotateCounterclockwise(void);
+
+void (*currentStateFunc)() = wait;
+void (*nextStateFunc)() = turnOn;
 
 int main(void)
 {
@@ -45,7 +36,7 @@ int main(void)
 			currentPressedIterations++;
 			if(currentPressedIterations >= neededPressedIterations)
 			{
-				currentState = nextState;
+				currentStateFunc = nextStateFunc;
 				currentPressedIterations = 0;
 			}
 		}
@@ -54,28 +45,7 @@ int main(void)
 			currentPressedIterations = 0;
 		}
 		
-		switch(currentState)
-		{
-			case TurningOff:
-				turnOff();
-				break;
-			
-			case TurnedOff:
-				wait();
-				break;
-			
-			case TurningOn:
-				turnOn();
-				break;
-			
-			case RotatingClockwise:
-				rotateClockwise();
-				break;
-			
-			case RotatingCounterclockwise:
-				rotateCounterclockwise();
-				break;
-		}
+		currentStateFunc();
 		
 		Delay(T - tau);
 	}
@@ -84,8 +54,8 @@ int main(void)
 void turnOff(void)
 {
 	TurnOffStepperMotor();
-	currentState = TurnedOff;
-	nextState = TurningOn;
+	currentStateFunc = wait;
+	nextStateFunc = turnOn;
 	Delay(tau);
 }
 
@@ -97,8 +67,8 @@ void wait(void)
 void turnOn(void)
 {
 	TurnOnStepperMotor();
-	currentState = RotatingClockwise;
-	nextState = RotatingCounterclockwise;
+	currentStateFunc = rotateClockwise;
+	nextStateFunc = rotateCounterclockwise;
 	Delay(tau);
 }
 
@@ -106,14 +76,14 @@ void rotateClockwise(void)
 {
 	StepperMotorSetDirection(Clockwise);
 	StepperMotorMakeStep(tau);
-	nextState = RotatingCounterclockwise;
+	nextStateFunc = rotateCounterclockwise;
 }
 
 void rotateCounterclockwise(void)
 {
 	StepperMotorSetDirection(Counterclockwise);
 	StepperMotorMakeStep(tau);
-	nextState = TurningOff;
+	nextStateFunc = turnOff;
 }
 
 void SysTick_Handler(void)
