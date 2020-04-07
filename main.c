@@ -27,6 +27,8 @@ void turnOn(void);
 void rotateClockwise(void);
 void rotateCounterclockwise(void);
 
+void (*funcArray[])() = {turnOff, wait, turnOn, rotateClockwise, rotateCounterclockwise};
+
 int main(void)
 {
 	uint32_t currentPressedIterations = 0;
@@ -54,28 +56,7 @@ int main(void)
 			currentPressedIterations = 0;
 		}
 		
-		switch(currentState)
-		{
-			case TurningOff:
-				turnOff();
-				break;
-			
-			case TurnedOff:
-				wait();
-				break;
-			
-			case TurningOn:
-				turnOn();
-				break;
-			
-			case RotatingClockwise:
-				rotateClockwise();
-				break;
-			
-			case RotatingCounterclockwise:
-				rotateCounterclockwise();
-				break;
-		}
+		funcArray[currentState]();
 		
 		Delay(T - tau);
 	}
