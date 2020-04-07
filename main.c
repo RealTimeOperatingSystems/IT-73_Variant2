@@ -18,10 +18,17 @@ typedef enum
 	RotatingCounterclockwise
 } State;
 
+State currentState = TurnedOff;
+State nextState = TurningOn;
+
+void turnOff(void);
+void wait(void);
+void turnOn(void);
+void rotateClockwise(void);
+void rotateCounterclockwise(void);
+
 int main(void)
 {
-	State currentState = TurnedOff;
-	State nextState = TurningOn;
 	uint32_t currentPressedIterations = 0;
 	
 	InitializeStepperMotor();
@@ -50,38 +57,63 @@ int main(void)
 		switch(currentState)
 		{
 			case TurningOff:
-				TurnOffStepperMotor();
-				currentState = TurnedOff;
-				nextState = TurningOn;
-				Delay(tau);
+				turnOff();
 				break;
 			
 			case TurnedOff:
-				Delay(tau);
+				wait();
 				break;
 			
 			case TurningOn:
-				TurnOnStepperMotor();
-				currentState = RotatingClockwise;
-				nextState = RotatingCounterclockwise;
-				Delay(tau);
+				turnOn();
 				break;
 			
 			case RotatingClockwise:
-				StepperMotorSetDirection(Clockwise);
-				StepperMotorMakeStep(tau);
-				nextState = RotatingCounterclockwise;
+				rotateClockwise();
 				break;
 			
 			case RotatingCounterclockwise:
-				StepperMotorSetDirection(Counterclockwise);
-				StepperMotorMakeStep(tau);
-				nextState = TurningOff;
+				rotateCounterclockwise();
 				break;
 		}
 		
 		Delay(T - tau);
 	}
+}
+
+void turnOff(void)
+{
+	TurnOffStepperMotor();
+	currentState = TurnedOff;
+	nextState = TurningOn;
+	Delay(tau);
+}
+
+void wait(void)
+{
+	Delay(tau);
+}
+
+void turnOn(void)
+{
+	TurnOnStepperMotor();
+	currentState = RotatingClockwise;
+	nextState = RotatingCounterclockwise;
+	Delay(tau);
+}
+
+void rotateClockwise(void)
+{
+	StepperMotorSetDirection(Clockwise);
+	StepperMotorMakeStep(tau);
+	nextState = RotatingCounterclockwise;
+}
+
+void rotateCounterclockwise(void)
+{
+	StepperMotorSetDirection(Counterclockwise);
+	StepperMotorMakeStep(tau);
+	nextState = TurningOff;
 }
 
 void SysTick_Handler(void)
