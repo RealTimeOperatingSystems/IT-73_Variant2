@@ -29,9 +29,6 @@ void rotateCounterclockwise(void);
 
 void (*funcArray[])() = {turnOff, turnOn, rotateClockwise, rotateCounterclockwise};
 
-void (*HighFunction)() = StepperMotorSetBits;
-void (*LowFunction)() = StepperMotorResetBits;
-
 int main(void)
 {
 	uint32_t currentPressedIterations = 0;
@@ -81,22 +78,20 @@ void turnOff(void)
 void turnOn(void)
 {
 	TurnOnStepperMotor();
-	StartTimer2();
-	HighFunction = do_nothing;
 	nextState = RotatingClockwise;
 }
 
 void rotateClockwise(void)
 {
 	StepperMotorSetDirection(Clockwise);
-	HighFunction = StepperMotorSetBits;
+	StartTimer2();
 	nextState = RotatingCounterclockwise;
 }
 
 void rotateCounterclockwise(void)
 {
 	StepperMotorSetDirection(Counterclockwise);
-	HighFunction = StepperMotorSetBits;
+	StartTimer2();
 	nextState = TurnedOff;
 }
 

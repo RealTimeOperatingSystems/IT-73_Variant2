@@ -10,7 +10,4 @@ void ConfigTimer2(uint32_t tau, uint32_t T);
 void StartTimer2(void);
 void StopTimer2(void);
 
-extern void (*HighFunction)();
-extern void (*LowFunction)();
-
 #endif

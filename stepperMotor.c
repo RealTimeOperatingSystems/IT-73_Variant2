@@ -6,10 +6,21 @@ void InitializeStepperMotor(void)
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
+	GPIO_StructInit(&GPIO_InitStructure);
+	
 	//Driver A4988: A2 - step, A3 - dir, A4 - enable
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	
+	GPIO_StructInit(&GPIO_InitStructure);
+	
+	//A2 = TIM2_CH3 (for PWM)
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
 	
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
