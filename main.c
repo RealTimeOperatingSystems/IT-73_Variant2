@@ -22,7 +22,6 @@ State currentState = TurnedOff;
 State nextState = TurnedOn;
 
 void turnOff(void);
-void wait(void);
 void turnOn(void);
 void rotateClockwise(void);
 void rotateCounterclockwise(void);
