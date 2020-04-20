@@ -22,7 +22,6 @@ State currentState = TurnedOff;
 State nextState = TurnedOn;
 
 void turnOff(void);
-void wait(void);
 void turnOn(void);
 void rotateClockwise(void);
 void rotateCounterclockwise(void);
@@ -61,11 +60,6 @@ int main(void)
 		
 		Delay(T);
 	}
-}
-
-void do_nothing(void)
-{
-	//do nothing
 }
 
 void turnOff(void)
