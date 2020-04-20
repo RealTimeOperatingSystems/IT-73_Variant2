@@ -4,6 +4,7 @@
 #include "sysTickDelay.h"
 #include "stepperMotor.h"
 #include "button.h"
+#include "timer.h"
 
 const uint32_t tau = 2;
 const uint32_t T = 10;
@@ -11,15 +12,14 @@ const uint32_t neededPressedIterations = 100;
 
 typedef enum
 {
-	TurningOff,
 	TurnedOff,
-	TurningOn,
+	TurnedOn,
 	RotatingClockwise,
 	RotatingCounterclockwise
 } State;
 
 State currentState = TurnedOff;
-State nextState = TurningOn;
+State nextState = TurnedOn;
 
 void turnOff(void);
 void wait(void);
@@ -27,7 +27,10 @@ void turnOn(void);
 void rotateClockwise(void);
 void rotateCounterclockwise(void);
 
-void (*funcArray[])() = {turnOff, wait, turnOn, rotateClockwise, rotateCounterclockwise};
+void (*funcArray[])() = {turnOff, turnOn, rotateClockwise, rotateCounterclockwise};
+
+void (*HighFunction)() = StepperMotorSetBits;
+void (*LowFunction)() = StepperMotorResetBits;
 
 int main(void)
 {
@@ -37,7 +40,9 @@ int main(void)
 	
 	ConfigSysTickTimer();
 	
-	TurnOnStepperMotor();
+	ConfigTimer2(tau, T);
+	
+	TurnOffStepperMotor();
 	
 	for(;;)
 	{
@@ -48,6 +53,7 @@ int main(void)
 			if(currentPressedIterations >= neededPressedIterations)
 			{
 				currentState = nextState;
+				funcArray[currentState]();
 				currentPressedIterations = 0;
 			}
 		}
@@ -56,45 +62,42 @@ int main(void)
 			currentPressedIterations = 0;
 		}
 		
-		funcArray[currentState]();
-		
-		Delay(T - tau);
+		Delay(T);
 	}
+}
+
+void do_nothing(void)
+{
+	//do nothing
 }
 
 void turnOff(void)
 {
 	TurnOffStepperMotor();
-	currentState = TurnedOff;
-	nextState = TurningOn;
-	Delay(tau);
-}
-
-void wait(void)
-{
-	Delay(tau);
+	StopTimer2();
+	nextState = TurnedOn;
 }
 
 void turnOn(void)
 {
 	TurnOnStepperMotor();
-	currentState = RotatingClockwise;
-	nextState = RotatingCounterclockwise;
-	Delay(tau);
+	StartTimer2();
+	HighFunction = do_nothing;
+	nextState = RotatingClockwise;
 }
 
 void rotateClockwise(void)
 {
 	StepperMotorSetDirection(Clockwise);
-	StepperMotorMakeStep(tau);
+	HighFunction = StepperMotorSetBits;
 	nextState = RotatingCounterclockwise;
 }
 
 void rotateCounterclockwise(void)
 {
 	StepperMotorSetDirection(Counterclockwise);
-	StepperMotorMakeStep(tau);
-	nextState = TurningOff;
+	HighFunction = StepperMotorSetBits;
+	nextState = TurnedOff;
 }
 
 void SysTick_Handler(void)

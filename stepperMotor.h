@@ -21,4 +21,8 @@ void StepperMotorSetDirection(StepperMotorDirection direction);
 
 void StepperMotorMakeStep(uint32_t tau);
 
+void StepperMotorSetBits(void);
+
+void StepperMotorResetBits(void);
+
 #endif

@@ -42,3 +42,13 @@ void StepperMotorMakeStep(uint32_t tau)
 	Delay(tau);
 	GPIO_ResetBits(GPIOA, GPIO_Pin_2);
 }
+
+void StepperMotorSetBits()
+{
+	GPIO_SetBits(GPIOA, GPIO_Pin_2);
+}
+
+void StepperMotorResetBits()
+{
+	GPIO_ResetBits(GPIOA, GPIO_Pin_2);
+}
